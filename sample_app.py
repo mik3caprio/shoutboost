@@ -85,10 +85,9 @@ def shout_home():
         tag_recent_media, next = api.tag_recent_media(tag_name=tag_search[0].name)
         videos = []
 
-        for tag_media in tag_recent_media:
+        for media in tag_recent_media:
 
             if(media.type == 'video'):
-                # videos.append('<video controls width height="150"><source type="video/mp4" src="%s"/></video>' % (media.get_standard_resolution_url()))
                 videos.append(media.get_standard_resolution_url())
             else:
                 print 'not video'
@@ -96,7 +95,7 @@ def shout_home():
     except Exception as e:
         print(e)
 
-    return template("shout/index")
+    return template("shout/index",videos=videos)
 
 def get_nav():
     nav_menu = ("<body><h1>Instagram Menu</h1>"
