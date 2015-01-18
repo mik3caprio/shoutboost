@@ -1,7 +1,6 @@
 % include('layout/header.tpl', title='Page Title')
 
     <div class="container">
-        <h1>Shout Boost Interface</h1>
          	<div class="container-map">
                 <div class="block-map"></div>
             </div>

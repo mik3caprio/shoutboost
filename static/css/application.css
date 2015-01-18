@@ -67,8 +67,7 @@ pre {
 }
 .container-map
 {
-    text-align: center;  
-    width: 40%;
+    width: 25%;
     height: 100%; 
     float: left;     
 }
@@ -81,16 +80,16 @@ pre {
     zoom: 1;
     *display: inline;
     
-    width: 250px;
-    height: 100px;
-    background: #000;
+    width: 600px;
+    height: 600px;
+    background: #D8DCDC;
     
     margin: 1%;
 }
 .container-posts
 {
-    text-align: center;  
-    width: 40%;      
+    width: 40%;
+    margin-left: 38em;   
 }
 
 .block
@@ -101,16 +100,18 @@ pre {
     zoom: 1;
     *display: inline;
     
-    width: 250px;
-    height: 100px;
-    background: #000;
+    width: 600px;
+    height: 200px;
+    background: #aaeeff;
     
     margin: 1%;
 }
 .container-hashtags
 {
-    text-align: right; 
-    width: 10%;       
+    width: 6.5%;
+    float: right;
+    margin-right: 21em;
+    margin-top: -53em;    
 }
 
 .block-2
@@ -121,9 +122,9 @@ pre {
     zoom: 1;
     *display: inline;
     
-    width: 100px;
-    height: 70px;
-    background: #aaeeff;
+    width: 200px;
+    height: 100px;
+    background: #FFFF00;
     
     margin: 1%;
 }
