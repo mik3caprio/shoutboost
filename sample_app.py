@@ -6,7 +6,7 @@ import beaker.middleware
 import urllib
 import cStringIO
 
-from bottle import route, redirect, post, run, request, hook, static_file
+from bottle import route, redirect, post, run, request, hook, static_file, install, template
 from bottle.ext import sqlite
 from instagram import client, subscriptions
 
@@ -20,7 +20,7 @@ session_opts = {
 
 app = beaker.middleware.SessionMiddleware(bottle.app(), session_opts)
 
-#plugin = sqlite.Plugin(dbfile='/Users/mikecap/Sites/hackbushwick2014/test.db')
+#plugin = sqlite.Plugin(dbfile='/path/to/file/test.db')
 #app.install(plugin)
 
 #@app.route('/show/:item')
@@ -68,20 +68,14 @@ def home():
     try:
         url = unauthenticated_api.get_authorize_url(scope=["basic","likes","comments","relationships"])
 
-#        context = dict(stuff=stuff,
-#                       things=None,
-#                       timeline_entries=None,
-#                       **self._method(stuff=stuff))
-#
-#        return render_template("shout/index.html.jinja",
-#                               **context
-#        )
-
         return '<body><a href="%s">Connect with Instagram</a>' % url
     except Exception as e:
         print(e)
 
 
+@route('/shout')
+def shout_home():
+    return template("shout/index")
 
 
 def get_nav():
