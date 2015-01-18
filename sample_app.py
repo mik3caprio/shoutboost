@@ -75,8 +75,28 @@ def home():
 
 @route('/shout')
 def shout_home():
-    return template("shout/index")
+    access_token = request.session['access_token']
 
+    if not access_token:
+        return 'Missing Access Token'
+    try:
+        api = client.InstagramAPI(access_token=access_token)
+        recent_media, next = api.user_recent_media()
+        photos = []
+
+        for media in recent_media:
+
+            if(media.type == 'video'):
+                # photos.append('<video controls width height="150"><source type="video/mp4" src="%s"/></video>' % (media.get_standard_resolution_url()))
+                photos.append(media.get_standard_resolution_url())
+            else:
+                return
+
+        return photos
+    except Exception as e:
+        print(e)
+
+    return template("shout/index")
 
 def get_nav():
     nav_menu = ("<body><h1>Instagram Menu</h1>"
