@@ -6,3 +6,4 @@ simplejson==3.6.3
 beaker==1.6.4
 six==1.8.0
 docopt
+embedly

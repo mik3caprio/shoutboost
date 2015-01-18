@@ -35,8 +35,8 @@ app = beaker.middleware.SessionMiddleware(bottle.app(), session_opts)
 
 
 CONFIG = {
-    'client_id': 'b2295a1989024deb83be4f2ca5d243a7',
-    'client_secret': '863ac37031484e15a8fbbdff3713d17a',
+    'client_id': '756dbfdfa85647faa31de8c59d72ed09',
+    'client_secret': '7a5de0bb5f3b4edda84d60718d393f91',
     'redirect_uri': 'http://localhost:8515/oauth_callback'
 }
 
@@ -45,104 +45,6 @@ bw_longitude = "-73.9178114"
 
 unauthenticated_api = client.InstagramAPI(**CONFIG)
 
-
-
-def img2txt(imgname):
-#    from docopt import docopt
-    from PIL import Image
-
-#    dct = docopt(__doc__)
-
-#    imgname = dct['<imgfile>']
-
-#    maxLen = dct['--maxLen']
-
-#    clr = dct['--color']
-    clr = False
-
-#    fontSize = dct['--fontSize']
-
-#    try:
-#        maxLen = float(maxLen)
-#    except:
-    maxLen = 100.0   # default maxlen: 100px
-
-#    try:
-#        fontSize = int(fontSize)
-#    except:
-    fontSize = 7
-
-    try:
-        img = Image.open(imgname)
-    except IOError:
-        exit("File not found: " + imgname)
-
-    # resize to: the max of the img is maxLen
-    width, height = img.size
-
-    rate = maxLen / max(width, height)
-
-    width = int(rate * width)  # cast to int
-
-    height = int(rate * height)
-
-    img = img.resize((width, height))
-
-    # img = img.convert('L')
-
-    # get pixels
-    pixel = img.load()
-
-    # grayscale
-    color = "MNHQ$OC?7>!:-;. "
-
-    string = ""
-
-    # first go through the height, otherwise will rotate
-    for h in xrange(height):
-
-        for w in xrange(width):
-            rgb = pixel[w, h]
-
-            if (clr):
-                string += "<span style=\"color:rgb" + str(rgb) + ";\">▇</span>"
-            else:
-                string += "<span style=\"font-family: 'Courier New', monospace; display:inline-block;\">" + color[int(sum(rgb) / 3.0 / 256.0 * 16)] + "</span>"
-
-        string += "\n"
-
-    # wrap with html
-    template = """<!DOCTYPE HTML>
-    <html>
-    <head>
-      <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	      <link href='http://fonts.googleapis.com/css?family=Cousine' rel='stylesheet' type='text/css'>
-      <style type="text/css" media="all">
-      body {background: black; color: white;}
-      h1, h2, li {font: 12px monospace;}
-      a, a:visited, a:hover {color:green;}
-        pre {
-          white-space: pre-wrap;       /* css-3 */
-          white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-          white-space: -pre-wrap;      /* Opera 4-6 */
-          white-space: -o-pre-wrap;    /* Opera 7 */
-          word-wrap: break-word;       /* Internet Explorer 5.5+ */
-          font-family: 'Cousine', 'Consolas'!important;
-          line-height: 1.0;
-          font-size: %dpx;
-        }
-		body {background: black; color white;}
-      </style>
-    </head>
-    <body><div id="container">
-      <pre>%s</pre></div>
-    </body>
-    </html>
-    """
-
-    html = template % (fontSize, string)
-
-    return html
 
 
 @hook('before_request')
@@ -155,34 +57,49 @@ def process_tag_update(update):
 reactor = subscriptions.SubscriptionsReactor()
 reactor.register_callback(subscriptions.SubscriptionType.TAG, process_tag_update)
 
+
 @route('/static/<filepath:path>')
 def server_static(filepath):
     return static_file(filepath, root='./static/')
 
+
 @route('/')
 def home():
     try:
-        url = unauthenticated_api.get_authorize_url(scope=["likes","comments"])
+        url = unauthenticated_api.get_authorize_url(scope=["basic","likes","comments","relationships"])
 
-        return '<body style="background: black; color: white"><a href="%s" style="font: 12px monospace;">[Co]nnect with Instant-GRAM</a>' % url
+#        context = dict(stuff=stuff,
+#                       things=None,
+#                       timeline_entries=None,
+#                       **self._method(stuff=stuff))
+#
+#        return render_template("shout/index.html.jinja",
+#                               **context
+#        )
+
+        return '<body><a href="%s">Connect with Instagram</a>' % url
     except Exception as e:
         print(e)
 
+
+
+
 def get_nav():
-    nav_menu = ("<body style='background: black; color: white'><h1 style='font: 25px monospace;'>Bushwick Internet '85</h1>"
+    nav_menu = ("<body><h1>Instagram Menu</h1>"
                 "<ol>"
-#                    "<li><a href='/recent'>User Recent Media</a> Calls user_recent_media - Get a list of a user's most recent media</li>"
-#                    "<li><a href='/user_media_feed'>User Media Feed</a> Calls user_media_feed - Get the currently authenticated user's media feed uses pagination</li>"
-#                    "<li><a href='/location_recent_media'>Location Recent Media</a> Calls location_recent_media - Get a list of recent media at a given location, in this case, Bushwick</li>"
-                    "<li style='font: 25px monospace;'><a href='/media_search'>Lat / Long [S]earch</a></li>"
-#                    "<li><a href='/media_popular'>Popular Media</a> Calls media_popular - Get a list of the overall most popular media items</li>"
-#                    "<li><a href='/user_search'>User Search</a> Calls user_search - Search for users on instagram, by name or username</li>"
-#                    "<li><a href='/user_follows'>User Follows</a> Get the followers of @instagram uses pagination</li>"
-#                    "<li><a href='/location_search'>Location Search</a> Calls location_search - Search for a location by lat/lng</li>"
-                    "<li style='font: 25px monospace;'><a href='/tag_search'>[B]ushwick Tag Search</a></li>"
+                    "<li><a href='/recent'>User Recent Media</a> Calls user_recent_media - Get a list of a user's most recent media</li>"
+                    "<li><a href='/user_media_feed'>User Media Feed</a> Calls user_media_feed - Get the currently authenticated user's media feed uses pagination</li>"
+                    "<li><a href='/location_recent_media'>Location Recent Media</a> Calls location_recent_media - Get a list of recent media at a given location, in this case, Bushwick</li>"
+                    "<li><a href='/media_search'>Lat / Long Search</a></li>"
+                    "<li><a href='/media_popular'>Popular Media</a> Calls media_popular - Get a list of the overall most popular media items</li>"
+                    "<li><a href='/user_search'>User Search</a> Calls user_search - Search for users on instagram, by name or username</li>"
+                    "<li><a href='/user_follows'>User Follows</a> Get the followers of @instagram uses pagination</li>"
+                    "<li><a href='/location_search'>Location Search</a> Calls location_search - Search for a location by lat/lng</li>"
+                    "<li><a href='/tag_search'>Tag Search</a></li>"
                 "</ol>")
 
     return nav_menu
+
 
 @route('/oauth_callback')
 def on_callback():
@@ -206,6 +123,7 @@ def on_callback():
         print(e)
 
     return get_nav()
+
 
 @route('/recent')
 def on_recent():
@@ -235,6 +153,7 @@ def on_recent():
         print(e)
 
     return "%s %s <br/>Remaining API Calls = %s/%s" % (get_nav(), content, api.x_ratelimit_remaining, api.x_ratelimit)
+
 
 @route('/media_like/<id>')
 def media_like(id):
@@ -318,21 +237,22 @@ def media_search():
     try:
         api = client.InstagramAPI(access_token=access_token)
         media_search = api.media_search(lat=bw_latitude, lng=bw_longitude, distance=1000)
-        ascii_photos = []
+        videos = []
 
         for media in media_search:
-            # Fetch the actual image
+            # Fetch only actual videos
             if (media.get_standard_resolution_url().endswith(".mp4")):
-                continue
+                video_file = cStringIO.StringIO(urllib.urlopen(media.get_standard_resolution_url()).read())
+
+                videos.append(video_file)
             else:
-                image_file = cStringIO.StringIO(urllib.urlopen(media.get_standard_resolution_url()).read())
+                continue
 
-                ascii_photos.append(img2txt(image_file))
-
-        content += '<br/>'.join(ascii_photos)
+        content += '<br />'.join(videos)
     except Exception as e:
         print(e)
-    return "%s %s <br/>Remaining API Calls = %s/%s" % (get_nav(),content,api.x_ratelimit_remaining,api.x_ratelimit)
+
+    return "%s %s <br />Remaining API Calls = %s/%s" % (get_nav(), content, api.x_ratelimit_remaining, api.x_ratelimit)
 
 
 @route('/media_popular')
@@ -457,7 +377,7 @@ def tag_search():
             else:
                 image_file = cStringIO.StringIO(urllib.urlopen(tag_media.get_standard_resolution_url()).read())
 
-                ascii_photos.append(img2txt(image_file))
+                ascii_photos.append(image_file)
 
         content += '<br/>'.join(ascii_photos)
     except Exception as e:

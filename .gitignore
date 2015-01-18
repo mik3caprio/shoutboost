@@ -5,6 +5,11 @@ __pycache__/
 # C extensions
 *.so
 
+session
+.DS_Store
+.gitignore
+.gitignore~
+
 # Distribution / packaging
 .Python
 env/
