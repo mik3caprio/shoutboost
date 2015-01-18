@@ -1,0 +1,60 @@
+
+body {
+    background: black;
+    color: white;
+}
+
+
+pre {
+    display: block;
+    font-family: Cousine, monospace;
+    font-size: 25px;
+    line-height: 25px;
+    white-space: pre;
+    margin: 0 0;
+    opacity: 0;
+}
+
+
+#container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1080px;
+    height: 500px;
+    margin-left: -540px;
+    margin-top: -250px;
+}
+
+#frame {
+    color: blue;
+    position: absolute;
+    top: 0; left: 0;
+}
+
+#logo {
+    color: red;
+    position: absolute;
+    top: 50px; left: 0;
+}
+
+#welcome {
+    position: absolute;
+    top: 250px; left: 720px;
+    width: 300px;
+}
+
+#menu {
+    position: absolute;
+    top: 425px; left: 90px;
+}
+
+.cursor {
+    color: white;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+	0% {color: black;}
+	50% {color: white;}
+}
