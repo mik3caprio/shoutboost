@@ -81,21 +81,26 @@ def shout_home():
         return 'Missing Access Token'
     try:
         api = client.InstagramAPI(access_token=access_token)
-        tag_search, next_tag = api.tag_search(q="jesuischarlie")
+        tag_search, next_tag = api.tag_search(q="videohack")
         tag_recent_media, next = api.tag_recent_media(tag_name=tag_search[0].name)
         videos = []
+        hashtags = []
+        locations = []
 
         for media in tag_recent_media:
+            print media
 
             if(media.type == 'video'):
-                videos.append(media.get_standard_resolution_url())
+                videos.append(media.get_link())
+                hashtags.append(media.get_tags())
+                locations.append(media.get_geo())
             else:
                 print 'not video'
 
     except Exception as e:
         print(e)
 
-    return template("shout/index",videos=videos)
+    return template("shout/index",videos=videos,hashtags=hashtags,locations=locations)
 
 def get_nav():
     nav_menu = ("<body><h1>Instagram Menu</h1>"
