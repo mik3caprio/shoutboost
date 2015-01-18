@@ -81,18 +81,18 @@ def shout_home():
         return 'Missing Access Token'
     try:
         api = client.InstagramAPI(access_token=access_token)
-        recent_media, next = api.user_recent_media()
-        photos = []
+        tag_search, next_tag = api.tag_search(q="jesuischarlie")
+        tag_recent_media, next = api.tag_recent_media(tag_name=tag_search[0].name)
+        videos = []
 
-        for media in recent_media:
+        for tag_media in tag_recent_media:
 
             if(media.type == 'video'):
-                # photos.append('<video controls width height="150"><source type="video/mp4" src="%s"/></video>' % (media.get_standard_resolution_url()))
-                photos.append(media.get_standard_resolution_url())
+                # videos.append('<video controls width height="150"><source type="video/mp4" src="%s"/></video>' % (media.get_standard_resolution_url()))
+                videos.append(media.get_standard_resolution_url())
             else:
-                return
+                print 'not video'
 
-        return photos
     except Exception as e:
         print(e)
 
